@@ -1,6 +1,6 @@
 {
   "name": "react-native-ethers-crypto",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Native cryptographic functions for ethers v6",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
