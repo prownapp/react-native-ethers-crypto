@@ -1,21 +1,26 @@
 # react-native-ethers-crypto
 
-Native cryptographic functions for ethers v6
+This library supplies the bare minimum of cryptographic functions needed to speed up operations of Ethers v6 on React Native.
 
 ## Installation
 
+Install this package and its peer dependencies.
+
 ```sh
-npm install react-native-ethers-crypto
+yarn add react-native-ethers-crypto
+yarn add @craftzdog/react-native-buffer react-native-quick-base64
 ```
 
 ## Usage
 
-```js
-import { multiply } from 'react-native-ethers-crypto';
+```ts
+import { ethers } from 'ethers';
+import { registerEthersHooks } from 'react-native-ethers-crypto';
 
-// ...
+registerEthersHooks(ethers);
 
-const result = await multiply(3, 7);
+// Now even 80x faster! ⚡
+ethers.Wallet.createRandom();
 ```
 
 ## Contributing
