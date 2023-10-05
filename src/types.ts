@@ -3,31 +3,31 @@ export type BytesLike = HexString | Uint8Array;
 
 export type EthersCryptoFnLike<T> = T & { register: (fn: T) => void; _: T };
 export type EthersLike = {
-  keccak256: EthersCryptoFnLike<(data: BytesLike) => HexString>;
-  ripemd160: EthersCryptoFnLike<(data: BytesLike) => HexString>;
-  sha256: EthersCryptoFnLike<(data: BytesLike) => HexString>;
-  sha512: EthersCryptoFnLike<(data: BytesLike) => HexString>;
+  keccak256: EthersCryptoFnLike<(data: Uint8Array) => BytesLike>;
+  ripemd160: EthersCryptoFnLike<(data: Uint8Array) => BytesLike>;
+  sha256: EthersCryptoFnLike<(data: Uint8Array) => BytesLike>;
+  sha512: EthersCryptoFnLike<(data: Uint8Array) => BytesLike>;
   computeHmac: EthersCryptoFnLike<
-    (algo: 'sha256' | 'sha512', key: BytesLike, data: BytesLike) => HexString
+    (algo: 'sha256' | 'sha512', key: Uint8Array, data: Uint8Array) => BytesLike
   >;
   pbkdf2: EthersCryptoFnLike<
     (
-      password: BytesLike,
-      salt: BytesLike,
+      password: Uint8Array,
+      salt: Uint8Array,
       iterations: number,
       keylen: number,
       algo: 'sha256' | 'sha512'
-    ) => HexString
+    ) => BytesLike
   >;
   scrypt: EthersCryptoFnLike<
     (
-      password: BytesLike,
-      salt: BytesLike,
+      password: Uint8Array,
+      salt: Uint8Array,
       N: number,
       r: number,
       p: number,
       dkLen: number
-    ) => Promise<HexString>
+    ) => Promise<BytesLike>
   >;
   randomBytes: EthersCryptoFnLike<(length: number) => Uint8Array>;
 };
