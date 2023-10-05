@@ -23,6 +23,29 @@ registerEthersHooks(ethers);
 ethers.Wallet.createRandom();
 ```
 
+## Depending on another Android library containing libcrypto.so
+
+`react-native-ethers-crypto` uses OpenSSL's `libcrypto.so`, which is also used by `flipper`. That means you can encounter an error like this while building the application:
+
+```
+Execution failed for task ':app:mergeDebugNativeLibs'.
+> A failure occurred while executing com.android.build.gradle.internal.tasks.MergeNativeLibsTask$MergeNativeLibsTaskWorkAction
+   > 2 files found with path 'lib/arm64-v8a/libcrypto.so' from inputs:
+      [...]
+```
+
+You can fix this error by adding the following block into your app's build.gradle.
+
+```
+android {
+    packagingOptions {
+        pickFirst 'lib/**/libcrypto.so'
+    }
+}
+```
+
+We know it's not perfect, but there's no better fix at this time.
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
