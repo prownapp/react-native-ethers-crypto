@@ -7,18 +7,13 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 ethers.randomBytes.register(rnec.randomBytes);
 
 function registerEthersHooks() {
-  for (const [name, fn] of Object.entries(rnec)) {
-    // @ts-ignore
-    ethers[name].register(fn);
-  }
+  rnec.registerEthersHooks(ethers);
 }
 
 function unregisterEthersHooks() {
-  for (const [name] of Object.entries(rnec)) {
-    if (name === 'randomBytes') continue;
-    // @ts-ignore
-    ethers[name].register(ethers[name]._);
-  }
+  rnec.unregisterEthersHooks(ethers);
+  // Keep ethers.randomBytes registered
+  ethers.randomBytes.register(rnec.randomBytes);
 }
 
 function EqualsAssertion({
