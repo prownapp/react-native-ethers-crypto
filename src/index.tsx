@@ -1,6 +1,7 @@
 import { NativeModules, Platform } from 'react-native';
 import type { Spec } from './NativeEthersCrypto';
-import { Buffer } from '@craftzdog/react-native-buffer';
+import type { BytesLike, EthersLike } from './types';
+import { bytesToHexString, hexStringToByteArray } from './utils';
 
 const LINKING_ERROR =
   `The package 'react-native-ethers-crypto' doesn't seem to be linked. Make sure: \n\n` +
@@ -25,21 +26,6 @@ const EthersCrypto: Omit<Spec, 'getConstants'> = EthersCryptoModule
         },
       }
     );
-
-export type HexString = string;
-export type BytesLike = HexString | Uint8Array;
-
-function bytesToHexString(data: BytesLike): string {
-  return typeof data === 'string' ? data : Buffer.from(data).toString('hex');
-}
-
-function hexStringToByteArray(hexString: string) {
-  return Uint8Array.from(
-    (hexString.startsWith('0x') ? hexString.substring(2) : hexString)
-      .match(/.{1,2}/g)
-      ?.map((byte) => parseInt(byte, 16)) || []
-  );
-}
 
 export function keccak256(data: BytesLike): string {
   return EthersCrypto.keccak256(bytesToHexString(data));
@@ -105,4 +91,26 @@ export function scrypt(
 
 export function randomBytes(length: number): Uint8Array {
   return hexStringToByteArray(EthersCrypto.randomBytes(length));
+}
+
+export function registerEthersHooks(ethers: EthersLike) {
+  ethers.keccak256.register(keccak256);
+  ethers.ripemd160.register(ripemd160);
+  ethers.sha256.register(sha256);
+  ethers.sha512.register(sha512);
+  ethers.computeHmac.register(computeHmac);
+  ethers.pbkdf2.register(pbkdf2);
+  ethers.scrypt.register(scrypt);
+  ethers.randomBytes.register(randomBytes);
+}
+
+export function unregisterEthersHooks(ethers: EthersLike) {
+  ethers.keccak256.register(ethers.keccak256._);
+  ethers.ripemd160.register(ethers.ripemd160._);
+  ethers.sha256.register(ethers.sha256._);
+  ethers.sha512.register(ethers.sha512._);
+  ethers.computeHmac.register(ethers.computeHmac._);
+  ethers.pbkdf2.register(ethers.pbkdf2._);
+  ethers.scrypt.register(ethers.scrypt._);
+  ethers.randomBytes.register(ethers.randomBytes._);
 }
